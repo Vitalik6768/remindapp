@@ -10,6 +10,11 @@ const config: Config = {
   theme: {
   	extend: {
   		colors: {
+			// orange: {
+			// 	500: "#FF7E5F",
+			// 	400: "#FEB47B",
+			//   },
+			
   			background: 'var(--background)',
   			foreground: 'var(--foreground)',
   			sidebar: {
