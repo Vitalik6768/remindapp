@@ -26,6 +26,8 @@ import { Select, SelectContent, SelectTrigger, SelectValue } from './ui/select';
 import { CollectionsColor, CollectionsColors } from '@/lib/constants';
 import { SelectItem } from './ui/select'; // Adjust if using a custom `SelectItem`
 import { cn } from '@/lib/utils';
+import { Separator } from './ui/separator';
+import { Button } from './ui/button';
 
 interface Props {
     open: boolean;
@@ -52,7 +54,7 @@ function CreateCollectionSheet({ open, onOpenChange }: Props) {
 
                 {/* Form Component */}
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 flex flex-col">
                         {/* Name Field */}
                         <FormField
                             control={form.control}
@@ -77,11 +79,11 @@ function CreateCollectionSheet({ open, onOpenChange }: Props) {
                                 <FormItem>
                                     <FormLabel>Color</FormLabel>
                                     <FormControl>
-                                        <Select
-                                            onValueChange={field.onChange} // Connect `react-hook-form` to the `Select`
-                                            defaultValue={field.value}
+                                        <Select onValueChange={(color) => field.onChange(color)}
+                                        // onValueChange={field.onChange} // Connect `react-hook-form` to the `Select`
+                                        // defaultValue={field.value}
                                         >
-                                            <SelectTrigger>
+                                            <SelectTrigger className={cn("w-full h-8 text-white", CollectionsColors[field.value as CollectionsColor])}>
                                                 <SelectValue placeholder="Select a color" />
                                             </SelectTrigger>
                                             <SelectContent>
@@ -100,14 +102,22 @@ function CreateCollectionSheet({ open, onOpenChange }: Props) {
                         />
 
                         {/* Submit Button */}
-                        <button
+                        {/* <button
                             type="submit"
                             className="btn btn-primary w-full"
                         >
                             Create Collection
-                        </button>
+                        </button> */}
                     </form>
                 </Form>
+                <div className='flex flex-col gap-3 mt-4'>
+                    <Separator />
+                    <Button className={cn(form.watch("color") && CollectionsColors[form.getValues("color") as CollectionsColor])} 
+                    onClick={form.handleSubmit(onSubmit)}>Confirm</Button>
+
+                </div>
+
+
             </SheetContent>
         </Sheet>
     );
