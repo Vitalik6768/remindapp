@@ -28,6 +28,7 @@ import { SelectItem } from './ui/select'; // Adjust if using a custom `SelectIte
 import { cn } from '@/lib/utils';
 import { Separator } from './ui/separator';
 import { Button } from './ui/button';
+import { createCollection } from '@/actions/collection';
 
 interface Props {
     open: boolean;
@@ -40,12 +41,26 @@ function CreateCollectionSheet({ open, onOpenChange }: Props) {
         resolver: zodResolver(creatCollectionSchema),
     });
 
-    const onSubmit = (data: any) => {
-        console.log('Submitted data:', data);
+    const onSubmit = async (data: any) => {
+
+        try {
+            await createCollection(data)
+            console.log('Submitted data:', data);
+
+
+        } catch (error) {
+
+        }
     };
 
+    const openChangeWrapper = (open: boolean) => {
+        form.reset();
+        onOpenChange(open);
+
+    }
+
     return (
-        <Sheet open={open} onOpenChange={onOpenChange}>
+        <Sheet open={open} onOpenChange={openChangeWrapper}>
             <SheetContent>
                 <SheetHeader>
                     <SheetTitle>Add new collection</SheetTitle>
@@ -112,8 +127,8 @@ function CreateCollectionSheet({ open, onOpenChange }: Props) {
                 </Form>
                 <div className='flex flex-col gap-3 mt-4'>
                     <Separator />
-                    <Button className={cn(form.watch("color") && CollectionsColors[form.getValues("color") as CollectionsColor])} 
-                    onClick={form.handleSubmit(onSubmit)}>Confirm</Button>
+                    <Button className={cn(form.watch("color") && CollectionsColors[form.getValues("color") as CollectionsColor])}
+                        onClick={form.handleSubmit(onSubmit)}>Confirm</Button>
 
                 </div>
 
