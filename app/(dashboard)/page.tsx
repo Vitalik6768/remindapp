@@ -1,3 +1,4 @@
+import CollectionCard from "@/components/CollectionCard";
 import CreateCollectionButton from "@/components/CreateCollectionButton";
 import SadFace from "@/components/icons/SadFace";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -16,14 +17,9 @@ export default async function Home() {
         <CollectionList />
       </Suspense>
 
-
-
     </>
-
-
   )
 }
-
 async function WelcomeMsg() {
   const user = await currentUser()
   if (!user) {
@@ -40,7 +36,10 @@ async function WelcomeMsg() {
 
   )
 
+
 }
+
+
 
 function WelcomeMsgFallback() {
   return (<div>Loading...</div>)
@@ -62,9 +61,23 @@ async function CollectionList() {
           <AlertTitle>There Are Not Collections Yet</AlertTitle>
           <AlertDescription>Create Collection To Get Started</AlertDescription>
         </Alert>
-        <CreateCollectionButton/>
+        <CreateCollectionButton />
       </div>
 
     )
   }
+
+  return (
+    <>
+      <CreateCollectionButton />
+
+      <div className="flex flex-col gap-4 mt-6">
+        {collection.map(collection => (
+          <CollectionCard key={collection.id} collection={collection} />
+        ))}
+      </div>
+
+    </>
+
+  )
 }

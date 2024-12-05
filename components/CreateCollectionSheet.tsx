@@ -29,6 +29,8 @@ import { cn } from '@/lib/utils';
 import { Separator } from './ui/separator';
 import { Button } from './ui/button';
 import { createCollection } from '@/actions/collection';
+import { toast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 interface Props {
     open: boolean;
@@ -37,18 +39,31 @@ interface Props {
 
 function CreateCollectionSheet({ open, onOpenChange }: Props) {
     const form = useForm<creatCollectionSchemaType>({
-        defaultValues: {}, // Ensure this matches your schema requirements
         resolver: zodResolver(creatCollectionSchema),
+        defaultValues: {}, // Ensure this matches your schema requirements
     });
+
+    const router = useRouter();
 
     const onSubmit = async (data: any) => {
 
         try {
             await createCollection(data)
-            console.log('Submitted data:', data);
+
+            openChangeWrapper(false)
+            router.refresh();
+
+            toast({
+                title: "created",
+                description: "collection created sucsessfuly",
+            })
 
 
         } catch (error) {
+            toast({
+                title: "Error",
+                description: "sumthing went wrong",
+            })
 
         }
     };
@@ -116,18 +131,13 @@ function CreateCollectionSheet({ open, onOpenChange }: Props) {
                             )}
                         />
 
-                        {/* Submit Button */}
-                        {/* <button
-                            type="submit"
-                            className="btn btn-primary w-full"
-                        >
-                            Create Collection
-                        </button> */}
                     </form>
                 </Form>
                 <div className='flex flex-col gap-3 mt-4'>
                     <Separator />
-                    <Button className={cn(form.watch("color") && CollectionsColors[form.getValues("color") as CollectionsColor])}
+                    <Button
+                        disabled={form.formState.isSubmitting}
+                        className={cn(form.watch("color") && CollectionsColors[form.getValues("color") as CollectionsColor])}
                         onClick={form.handleSubmit(onSubmit)}>Confirm</Button>
 
                 </div>

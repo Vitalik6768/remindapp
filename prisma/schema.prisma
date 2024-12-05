@@ -10,12 +10,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Collection{
+model Collection {
+  id        Int       @id @default(autoincrement())
+  name      String
+  userId    String
+  color     String
+  createdAt DateTime  @default(now())
+  Tasks     Task[]
+
+  @@unique([name, userId]) // Ensure unique collection names per user
+}
+
+model Task{
   id Int @id @default(autoincrement())
-  name String 
+  content String
   userId String
-  color String
+  done Boolean @default(false)
+  expiresAt DateTime?
   createdAt DateTime @default(now())
-  @@unique ([name, userId])
+
+
+  collectionId Int
+   Collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
 
 }

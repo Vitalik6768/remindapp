@@ -7,6 +7,7 @@ import NavBar from "@/components/NavBar";
 import { Separator } from "@/components/ui/separator";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { cn } from "@/lib/utils"; // Ensure this is implemented correctly
+import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -47,6 +48,7 @@ export default function RootLayout({
               <Separator />
               <main className="flex flex-grow w-full justify-center dark:bg-neutral-900">
                 {children}
+                <Toaster/>
 
               </main>
             </div>
